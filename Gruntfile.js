@@ -46,8 +46,10 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ["**/*.html", "**/*.js",  "**/js/**"],
-      tasks: 'reload'
+      files: ["**/*.html", "**/*.js",  "**/js/**", "css/*.css"],
+      options: {
+        livereload: true
+      }
     }
   });
 
@@ -57,16 +59,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
 
   // Default task.
-  grunt.registerTask('default', ['concat', 'uglify', 'cssmin', 'reload']);
-  grunt.registerTask("reload", "reload Chrome on OS X",
-    function() {
-      require("child_process").exec("osascript " +
-        "-e 'tell application \"Google Chrome\" " +
-          "to tell the active tab of its first window' " +
-        "-e 'reload' " +
-        "-e 'end tell'");
-    });
+  grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
 };

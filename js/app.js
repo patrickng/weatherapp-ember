@@ -1,22 +1,80 @@
-App = Ember.Application.create();
+(function() {
+	'use strict';
 
-// router
+	var defaultLocations = ['New York, NY', 'San Francisco, CA'];
 
-App.Router.map(function() {
-  // put your routes here
-  this.route("/");
-});
+	window.WeatherApp = Ember.Application.create();
 
-// routes
+	WeatherApp.ApplicationAdapter = DS.LSAdapter.extend({
+		namespace: 'locations-emberjs'
+	});
 
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return ['red', 'yellow', 'blue'];
-  }
-});
+	WeatherApp.Router.map(function() {
+		// put your routes here
+		this.resource('locations', { path: '/' }, function() {
+			
+		});
+	});
 
-//models
+	WeatherApp.LocationsRoute = Ember.Route.extend({
+		model: function() {
+			return this.store.find('location');
+		}
+	});
 
-App.Location = DS.Model.extend({
-	name: DS.attr('string')
-});
+	WeatherApp.LocationsIndexRoute = Ember.Route.extend({
+		setupController: function() {
+			this.controllerFor('locations').set('locations', this.modelFor('locations'));
+		}
+	});
+
+	WeatherApp.Location = DS.Model.extend({
+		name: DS.attr('string')
+	});
+
+	WeatherApp.LocationsController = Ember.ArrayController.extend({
+		actions: {
+			addLocation: function() {
+				var name = this.get('locationName');
+
+				this.store.createRecord('location', {
+					name: name
+				});
+
+				this.set('locationName', '');
+			},
+
+			selectedLocation: function() {
+
+			}
+		},
+		city: function() {
+			return this.get('id').split('_')[0];
+		}.property('id'),
+
+		state: function() {
+			return this.get('id').split('_')[1];
+		}.property('id'),
+
+		name: function() {
+			return city + ", " + state;
+		}.property('city', 'state'),
+
+		loadData: function() {
+
+		}
+	});
+
+	// WeatherApp.LocationDetailController = Ember.
+
+	WeatherApp.HourlyEntryController = Ember.ObjectController.extend({
+
+	});
+
+	WeatherApp.TenDayEntryController = Ember.ObjectController.extend({
+
+	});
+
+	
+
+})();
